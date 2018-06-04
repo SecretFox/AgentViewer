@@ -50,8 +50,8 @@ class com.fox.AgentViewer.Main {
 		AgentSources["240"] = "Agent Pack \n Kaidan, South Africa Mains";
 		AgentSources["241"] = "Solomon, Egypt Mains";
 		AgentSources["242"] = "Agent Pack \n Egypt, Transylvania Mains";
-		AgentSources["244"] = "Kaidan \n South Africa Mains";
-		AgentSources["245"] = "Kaidan \n South Africa Mains";
+		AgentSources["244"] = "Kaidan, South Africa Mains";
+		AgentSources["245"] = "Kaidan, South Africa Mains";
 		AgentSources["246"] = "Scenarios";
 		AgentSources["264"] = "Tutorial";
 		AgentSources["2441"] = "SA Agent Pack";
@@ -130,6 +130,7 @@ class com.fox.AgentViewer.Main {
 								txt2.embedFonts = true;
 								txt2.setNewTextFormat(this.m_Trait2.getTextFormat());
 								txt2.text = Main.AgentSources[agentData.m_AgentId.toString()];
+								txt2.autoSize = "right";
 								txt2.verticalAutoSize = "true";
 							}
 							
