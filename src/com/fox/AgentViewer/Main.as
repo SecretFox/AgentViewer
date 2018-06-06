@@ -87,7 +87,7 @@ class com.fox.AgentViewer.Main {
 						}
 					}
 				}
-				if (!_global.GUI.AgentSystem.RosterIcon.prototype._UpdatePortraitVisibility){
+				if (!_global.GUI.AgentSystem.RosterIcon.prototype._UpdatePortraitVisibility) {
 					_global.GUI.AgentSystem.RosterIcon.prototype._UpdatePortraitVisibility = _global.GUI.AgentSystem.RosterIcon.prototype.UpdatePortraitVisibility;
 					_global.GUI.AgentSystem.RosterIcon.prototype.UpdatePortraitVisibility = function () {
 						this.m_Frame.m_Portrait._visible = true;
@@ -98,34 +98,72 @@ class com.fox.AgentViewer.Main {
 					var agentIcon:MovieClip = _root.agentsystem.m_Window.m_Content.m_Roster[i];
 					agentIcon["UpdateVisuals"]();
 				}
-				if (!_global.GUI.AgentSystem.Roster.prototype._OnAgentSelected){
+				if (!_global.GUI.AgentSystem.Roster.prototype._OnAgentSelected) {
 					_global.GUI.AgentSystem.Roster.prototype._OnAgentSelected = _global.GUI.AgentSystem.Roster.prototype.OnAgentSelected;
-					_global.GUI.AgentSystem.Roster.prototype.OnAgentSelected = function(event:Object){
+					_global.GUI.AgentSystem.Roster.prototype.OnAgentSelected = function(event:Object) {
 						var agentData = this.m_TileList.dataProvider[this.m_TileList.selectedIndex];
 						this.SignalAgentSelected.Emit(agentData);
 					}
 				}
-				if (!_global.GUI.AgentSystem.AgentInfo.prototype._SetData2){
+				/* same as original, except also sorts unowned agents.
+				 * Does not call the original function
+				 * 
+				 * AgentTweaks also sorts the roster(it adds favourite agents) without sorting unowned, 
+				 * however since it has a short delay this function has time to to run first, which sorts the unowned agents.
+				 * Since m_AllAgents gets looped through in order AgentTweaks should retain the order of unowned agents.
+				 * So i think everything should work okay.
+				 */
+				
+				if (!_global.GUI.AgentSystem.Roster.prototype._SortChanged) {
+					_global.GUI.AgentSystem.Roster.prototype._SortChanged = _global.GUI.AgentSystem.Roster.prototype.SortChanged;
+					_global.GUI.AgentSystem.Roster.prototype.SortChanged = function() {
+						this.m_SortType = this.m_SortDropdown.selectedIndex;
+						this.m_SortObject = {fields:this.m_SortDropdown.dataProvider[this.m_SortDropdown.selectedIndex].sortObj,
+											 options:this.m_SortDropdown.dataProvider[this.m_SortDropdown.selectedIndex].sortOption
+											};
+						var ownedAgents = new Array();
+						var unownedAgents = new Array();
+						for (var i:Number = 0; i < this.m_AllAgents.length; i++) {
+							if (AgentSystem.HasAgent(this.m_AllAgents[i].m_AgentId)) {
+								ownedAgents.push(this.m_AllAgents[i]);
+							} else {
+								unownedAgents.push(this.m_AllAgents[i]);
+							}
+						}
+						if (this.m_CompareMission == undefined) {
+							ownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options);
+							unownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options);//Sorts unowned
+						} else {
+							ownedAgents.sortOn(["m_SuccessChance", "m_Level", "m_Order"], Array.DESCENDING | Array.NUMERIC);
+							unownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options); // can't send unowned agents on mission,so sort by selected dropdown instead
+						}
+						this.m_AllAgents = ownedAgents.concat(unownedAgents);
+						this.SetPage(this.m_CurrentPage);
+						this.RemoveFocus();
+					}
+					_root.agentsystem.m_Window.m_Content.m_Roster.SortChanged();
+				}
+				if (!_global.GUI.AgentSystem.AgentInfo.prototype._SetData2) {
 					_global.GUI.AgentSystem.AgentInfo.prototype._SetData2 = _global.GUI.AgentSystem.AgentInfo.prototype.SetData;
-					_global.GUI.AgentSystem.AgentInfo.prototype.SetData = function(agentData:AgentSystemAgent){
+					_global.GUI.AgentSystem.AgentInfo.prototype.SetData = function(agentData:AgentSystemAgent) {
 						this._SetData2(agentData);
-						if (!AgentSystem.HasAgent(agentData.m_AgentId)){
+						if (!AgentSystem.HasAgent(agentData.m_AgentId)) {
 							this.m_Stat1.m_Value.text = agentData.m_Stat1.toString();
 							this.m_Stat2.m_Value.text = agentData.m_Stat2.toString();
 							this.m_Stat3.m_Value.text = agentData.m_Stat3.toString();
-							if (Main.AgentSources[agentData.m_AgentId.toString()]){
+							if (Main.AgentSources[agentData.m_AgentId.toString()]) {
 								var Source:MovieClip = this.createEmptyMovieClip("m_Source", this.getNextHighestDepth());
 								Source._y =  this.m_Trait2Category._y * 2 - this.m_Trait1Category._y - 3;
 								Source._x =  this.m_Trait2Category._x;
-								
+
 								var font:TextFormat = this.m_Trait2Category.getTextFormat();
 								font.align = "right";
-								
+
 								var txt:TextField = Source.createTextField("m_Header", Source.getNextHighestDepth(), 0, 0, 165, 15);
 								txt.embedFonts = true;
 								txt.setNewTextFormat(font);
 								txt.text = "Source";
-								
+
 								var txt2:TextField = Source.createTextField("m_Desc", Source.getNextHighestDepth(), -35, this.m_Trait2._y - this.m_Trait2Category._y-3, 200, 20);
 								txt2.embedFonts = true;
 								txt2.setNewTextFormat(this.m_Trait2.getTextFormat());
@@ -133,7 +171,6 @@ class com.fox.AgentViewer.Main {
 								txt2.autoSize = "right";
 								txt2.verticalAutoSize = "true";
 							}
-							
 						}
 					}
 				}
