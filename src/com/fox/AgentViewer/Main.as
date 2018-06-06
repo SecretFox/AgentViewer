@@ -105,28 +105,19 @@ class com.fox.AgentViewer.Main {
 						this.SignalAgentSelected.Emit(agentData);
 					}
 				}
-				/* Sorts unowned agents and pushes them at the end of m_AllAgents array
-				 * Default sort function will then sort owned agents (keeping unowned agent order set by this function) and updates the display.
-				 */
-				
+				/* Sorts all agents without differentiating between owned/unowned agents.
+				 * Result is a mess where unowned/owned agents are mixed, calling original function will then separate them to owned and unowned agents, sorts owned, and combines the two arrays.
+				 * Since the m_AllAgents is looped through in order unowned agents will now be in proper order aswell.
+				*/
 				if (!_global.GUI.AgentSystem.Roster.prototype._SortChanged) {
 					_global.GUI.AgentSystem.Roster.prototype._SortChanged = _global.GUI.AgentSystem.Roster.prototype.SortChanged;
 					_global.GUI.AgentSystem.Roster.prototype.SortChanged = function() {
 						this.m_SortType = this.m_SortDropdown.selectedIndex;
-						this.m_SortObject = {fields:this.m_SortDropdown.dataProvider[this.m_SortDropdown.selectedIndex].sortObj,
-											 options:this.m_SortDropdown.dataProvider[this.m_SortDropdown.selectedIndex].sortOption
-											};
-						var ownedAgents = new Array();
-						var unownedAgents = new Array();
-						for (var i:Number = 0; i < this.m_AllAgents.length; i++) {
-							if (AgentSystem.HasAgent(this.m_AllAgents[i].m_AgentId)) {
-								ownedAgents.push(this.m_AllAgents[i]);
-							} else {
-								unownedAgents.push(this.m_AllAgents[i]);
-							}
-						}
-						unownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options)
-						this.m_AllAgents = ownedAgents.concat(unownedAgents);
+						this.m_SortObject = {
+							fields:this.m_SortDropdown.dataProvider[this.m_SortType].sortObj, 
+							options:this.m_SortDropdown.dataProvider[this.m_SortType].sortOption
+						};
+						this.m_AllAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options);
 						this._SortChanged();
 					}
 					_root.agentsystem.m_Window.m_Content.m_Roster.SortChanged();
