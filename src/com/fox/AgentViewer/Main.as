@@ -105,13 +105,8 @@ class com.fox.AgentViewer.Main {
 						this.SignalAgentSelected.Emit(agentData);
 					}
 				}
-				/* same as original, except also sorts unowned agents.
-				 * Does not call the original function
-				 * 
-				 * AgentTweaks also sorts the roster(it adds favourite agents) without sorting unowned, 
-				 * however since it has a short delay this function has time to to run first, which sorts the unowned agents.
-				 * Since m_AllAgents gets looped through in order AgentTweaks should retain the order of unowned agents.
-				 * So i think everything should work okay.
+				/* Sorts unowned agents and pushes them at the end of m_AllAgents array
+				 * Default sort function will then sort owned agents (keeping unowned agent order set by this function) and updates the display.
 				 */
 				
 				if (!_global.GUI.AgentSystem.Roster.prototype._SortChanged) {
@@ -130,16 +125,9 @@ class com.fox.AgentViewer.Main {
 								unownedAgents.push(this.m_AllAgents[i]);
 							}
 						}
-						if (this.m_CompareMission == undefined) {
-							ownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options);
-							unownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options);//Sorts unowned
-						} else {
-							ownedAgents.sortOn(["m_SuccessChance", "m_Level", "m_Order"], Array.DESCENDING | Array.NUMERIC);
-							unownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options); // can't send unowned agents on mission,so sort by selected dropdown instead
-						}
+						unownedAgents.sortOn(this.m_SortObject.fields, this.m_SortObject.options)
 						this.m_AllAgents = ownedAgents.concat(unownedAgents);
-						this.SetPage(this.m_CurrentPage);
-						this.RemoveFocus();
+						this._SortChanged();
 					}
 					_root.agentsystem.m_Window.m_Content.m_Roster.SortChanged();
 				}
