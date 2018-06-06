@@ -107,7 +107,7 @@ class com.fox.AgentViewer.Main {
 				}
 				/* Sorts all agents without differentiating between owned/unowned agents.
 				 * Result is a mess where unowned/owned agents are mixed, calling original function will then separate them to owned and unowned agents, sorts owned, and combines the two arrays.
-				 * Since the m_AllAgents is looped through in order unowned agents will now be in proper order aswell.
+				 * Since m_AllAgents is looped through in order, unowned agents will now be in proper order aswell.
 				*/
 				if (!_global.GUI.AgentSystem.Roster.prototype._SortChanged) {
 					_global.GUI.AgentSystem.Roster.prototype._SortChanged = _global.GUI.AgentSystem.Roster.prototype.SortChanged;
