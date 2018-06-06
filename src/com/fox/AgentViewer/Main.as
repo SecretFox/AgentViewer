@@ -140,24 +140,10 @@ class com.fox.AgentViewer.Main {
 							this.m_Stat2.m_Value.text = agentData.m_Stat2.toString();
 							this.m_Stat3.m_Value.text = agentData.m_Stat3.toString();
 							if (Main.AgentSources[agentData.m_AgentId.toString()]) {
-								var Source:MovieClip = this.createEmptyMovieClip("m_Source", this.getNextHighestDepth());
-								Source._y =  this.m_Trait2Category._y * 2 - this.m_Trait1Category._y - 3;
-								Source._x =  this.m_Trait2Category._x;
+								this.m_EquipmentTraitCategory.text = "Source";
+								this.m_EquipmentTrait.text = Main.AgentSources[agentData.m_AgentId.toString()];
+								this.m_EquipmentTrait.autoSize = "right";
 
-								var font:TextFormat = this.m_Trait2Category.getTextFormat();
-								font.align = "right";
-
-								var txt:TextField = Source.createTextField("m_Header", Source.getNextHighestDepth(), 0, 0, 165, 15);
-								txt.embedFonts = true;
-								txt.setNewTextFormat(font);
-								txt.text = "Source";
-
-								var txt2:TextField = Source.createTextField("m_Desc", Source.getNextHighestDepth(), -35, this.m_Trait2._y - this.m_Trait2Category._y-3, 200, 20);
-								txt2.embedFonts = true;
-								txt2.setNewTextFormat(this.m_Trait2.getTextFormat());
-								txt2.text = Main.AgentSources[agentData.m_AgentId.toString()];
-								txt2.autoSize = "right";
-								txt2.verticalAutoSize = "true";
 							}
 						}
 					}
