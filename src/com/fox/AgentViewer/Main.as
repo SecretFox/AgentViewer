@@ -7,7 +7,7 @@ class com.fox.AgentViewer.Main {
 
 	private var AgentWindow:DistributedValue;
 	private var HideOleg:DistributedValue;
-	private var HideFactionAgents:DistributedValue;
+	private var HideBoone:DistributedValue;
 	static var AgentSources:Object;
 	public static function main(swfRoot:MovieClip):Void {
 		var s_app = new Main(swfRoot);
@@ -19,21 +19,21 @@ class com.fox.AgentViewer.Main {
 
 	public function Activate(config:Archive) {
 		HideOleg.SetValue(Boolean(config.FindEntry("Oleg", false)));
-		HideFactionAgents.SetValue(Boolean(config.FindEntry("Faction", false)));
+		HideBoone.SetValue(Boolean(config.FindEntry("Faction", false)));
 	}
 	public function Deactivate():Archive {
 		var conf:Archive = new Archive();
 		conf.AddEntry("Oleg", HideOleg.GetValue());
-		conf.AddEntry("Faction", HideFactionAgents.GetValue());
+		conf.AddEntry("Faction", HideBoone.GetValue());
 		return conf
 	}
 
 	public function Main() {
 		AgentWindow = DistributedValue.Create("agentSystem_window");
 		HideOleg = DistributedValue.Create("AgentViewer_HideOleg");
-		HideFactionAgents = DistributedValue.Create("AgentViewer_HideFactionAgents");
+		HideBoone = DistributedValue.Create("AgentViewer_HideBoone");
 		HideOleg.SetValue(false);
-		HideFactionAgents.SetValue(false);
+		HideBoone.SetValue(false);
 		AgentSources = new Object();
 		AgentSources["113"] = "Agent Pack \n Dungeons";
 		AgentSources["173"] = "Agent Pack \n Dungeons";
@@ -90,20 +90,36 @@ class com.fox.AgentViewer.Main {
 		AgentSources["2722"] = "Dragon Faction Mission";
 		AgentSources["2721"] = "Templar Faction Mission";
 		AgentSources["2723"] = "Illuminati Faction mission";
+		
+		//new scenario patch
+		AgentSources["2761"] = "Community events";//jack
+		AgentSources["2741"] = "Druids of Avalon Pack";//Sif
+		AgentSources["2747"] = "Druids of Avalon Pack";//Lynch
+		AgentSources["2742"] = "Druids of Avalon Pack \n Occult Defence scenario";//Finn
+		AgentSources["2743"] = "Druids of Avalon Pack \n Occult Defence scenario";//Laughing
+		AgentSources["2744"] = "Druids of Avalon Pack \n Occult Defence scenario";//Francis
+		AgentSources["2745"] = "Druids of Avalon Pack \n Occult Defence scenario";//Amelia
+		AgentSources["2746"] = "Druids of Avalon Pack \n Occult Defence scenario";//Nuala
+		AgentSources["2748"] = "Druids of Avalon Pack \n Occult Defence scenario";//Brann
+		AgentSources["2749"] = "Druids of Avalon Pack \n Occult Defence scenario";//Fearghas
+		AgentSources["2750"] = "Druids of Avalon Pack \n Occult Defence scenario";//Lady
+		AgentSources["2791"] = "Agent Mission Reward";//Jerónimo
+		
 		if (_global.com.fox.AgentViewer.Hooked == undefined) _global.com.fox.AgentViewer.Hooked = false;
 	}
 	public function Load() {
 		AgentWindow.SignalChanged.Connect(Hook, this);
 		HideOleg.SignalChanged.Connect(SettingsChanged, this);
-		HideFactionAgents.SignalChanged.Connect(SettingsChanged, this);
+		HideBoone.SignalChanged.Connect(SettingsChanged, this);
 		Hook();
 	}
 
 	public function UnLoad() {
 		AgentWindow.SignalChanged.Disconnect(Hook, this);
 		HideOleg.SignalChanged.Disconnect(SettingsChanged, this);
-		HideFactionAgents.SignalChanged.Disconnect(SettingsChanged, this);
+		HideBoone.SignalChanged.Disconnect(SettingsChanged, this);
 	}
+	// Hidden agenst are removed from m_AllAgents, need fresh array when settings change
 	private function SettingsChanged(){
 		if (AgentWindow.GetValue()){
 			_root.agentsystem.m_Window.m_Content.m_Roster.m_AllAgents =  AgentSystem.GetAgents();
@@ -120,6 +136,20 @@ class com.fox.AgentViewer.Main {
 						if (!this.m_PortraitMode) {
 							this.m_Name._visible = true;
 						}
+						//used for screenshot for AgentMittens
+						/*
+						
+						this.m_Away._visible = false;
+						this.m_Timer._visible = false;
+						this.m_Level._visible = false;
+						this.m_Stat1._visible = false;
+						this.m_Stat2._visible = false;
+						this.m_Stat3._visible = false;
+						this.m_TraitCategories._visible = false;
+						this.m_Foil._visible = false;
+						this.m_Frame.m_Frame._visible = false;
+						this._alpha = 100;
+						*/
 					};
 					f.base = _global.GUI.AgentSystem.RosterIcon.prototype.UpdateVisuals;
 					_global.GUI.AgentSystem.RosterIcon.prototype.UpdateVisuals = f;
@@ -137,7 +167,7 @@ class com.fox.AgentViewer.Main {
 					}
 				// Roster.OnAgentSelected
 				// I still want to call original function in case it changes or other mods use it
-				// PS: Sending the same signal twice breaks things
+				// PS: Sending the same signal twice breaks things, so only sending it for unowned agents
 					f = function(event:Object) {
 						arguments.callee.base.apply(this, arguments);
 						var agentData:AgentSystemAgent = this.m_TileList.dataProvider[this.m_TileList.selectedIndex];
@@ -152,26 +182,17 @@ class com.fox.AgentViewer.Main {
 				// 	No need to call this function at start, sortChanged() will take care of it.
 					f = function(pageNum:Number) {
 						var HideOleg = com.GameInterface.DistributedValueBase.GetDValue("AgentViewer_HideOleg");
-						var HideFactionAgents = com.GameInterface.DistributedValueBase.GetDValue("AgentViewer_HideFactionAgents");
-						if (HideOleg || HideFactionAgents) {
+						var HideBoone = com.GameInterface.DistributedValueBase.GetDValue("AgentViewer_HideBoone");
+						if (HideOleg || HideBoone) {
 							var PlayerFaction = com.GameInterface.Game.Character.GetClientCharacter().GetStat(_global.Enums.Stat.e_PlayerFaction);
 							for (var i in this.m_AllAgents) {
 								if (HideOleg && this.m_AllAgents[i].m_AgentId == 2681) {
-									delete this.m_AllAgents[i];
+									this.m_AllAgents.splice(i,1);
 									continue
 								}
-								if (HideFactionAgents) {
-									switch (PlayerFaction) {
-										case _global.Enums.Factions.e_FactionDragon:
-											if (this.m_AllAgents[i].m_AgentId == 2723 || this.m_AllAgents[i].m_AgentId == 2721) delete this.m_AllAgents[i];
-											break;
-										case _global.Enums.Factions.e_FactionTemplar:
-											if (this.m_AllAgents[i].m_AgentId == 2723 || this.m_AllAgents[i].m_AgentId == 2722) delete this.m_AllAgents[i];
-											break;
-										case _global.Enums.Factions.e_FactionIlluminati:
-											if (this.m_AllAgents[i].m_AgentId == 2721 || this.m_AllAgents[i].m_AgentId == 2722) delete this.m_AllAgents[i];
-											break;
-									}
+								if (HideBoone && this.m_AllAgents[i].m_AgentId == 2761) {
+									this.m_AllAgents.splice(i,1);
+									continue
 								}
 							}
 						}
