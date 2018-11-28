@@ -102,7 +102,7 @@ class com.fox.AgentViewer.Main {
 		AgentSources["2746"] = "Druids of Avalon Pack \n Occult Defence scenario";//Nuala
 		AgentSources["2748"] = "Druids of Avalon Pack \n Occult Defence scenario";//Brann
 		AgentSources["2749"] = "Druids of Avalon Pack \n Occult Defence scenario";//Fearghas
-		AgentSources["2750"] = "Druids of Avalon Pack \n Occult Defence scenario";//Lady
+		AgentSources["2750"] = "Occult Defence scenario?";//Lady
 		AgentSources["2791"] = "Agent Mission Reward";//Jerónimo
 		
 		if (_global.com.fox.AgentViewer.Hooked == undefined) _global.com.fox.AgentViewer.Hooked = false;
