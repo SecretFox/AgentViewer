@@ -8,7 +8,76 @@ class com.fox.AgentViewer.Main {
 	private var AgentWindow:DistributedValue;
 	private var HideOleg:DistributedValue;
 	private var HideBoone:DistributedValue;
-	static var AgentSources:Object;
+	static var AgentSources:Array =	[
+		[113, "Agent Pack \n Dungeons"],
+		[173, "Agent Pack \n Dungeons"],
+		[174, "Agent Pack \n Dungeons"],
+		[175, "Agent Pack \n Dungeons"],
+		[179, "Agent Pack \n Dungeons"],
+		[181, "Agent Pack \n Regionals"],
+		[204, "Agent Pack \n Regionals"],
+		[206, "Agent Pack \n Regionals"],
+		[207, "Agent Pack \n Regionals"],
+		[209, "Achievement: Global Network"],
+		[211, "Achievement: Mission Coordinator"],
+		[212, "Agent Mission Reward"],
+		[213, "Agent Mission Reward"],
+		[214, "Scenarios"],
+		[215, "Agent Pack \n Solomon, Kaidan Mains"],
+		[217, "Agent Pack \n Solomon, Egypt Mains"],
+		[218, "New York Raid"],
+		[221, "Agent Mission Reward"],
+		[223, "Agent Mission Reward"],
+		[224, "Scenario"],
+		[225, "Agent Mission Reward"],
+		[226, "Agent Pack \n Egypt, Transylvania Mains"],
+		[227, "Agent Pack \n Kaidan, South Africa Mains"],
+		[228, "Agent Pack \n Solomon, Egypt Mains"],
+		[229, "Scenarios"],
+		[230, "Regionals"],
+		[231, "Egypt, Transylvania Mains"],
+		[233, "Agent Pack \n Egypt, Transylvania Mains"],
+		[234, "Agent Pack \n Solomon, Egypt Mains"],
+		[235, "Scenarios"],
+		[236, "Solomon, Egypt Mains"],
+		[238, "Agent Mission Reward"],
+		[239, "Agent Pack \n Egypt, Transylvania Mains"],
+		[240, "Agent Pack \n Kaidan, South Africa Mains"],
+		[241, "Solomon, Egypt Mains"],
+		[242, "Agent Pack \n Egypt, Transylvania Mains"],
+		[244, "Kaidan, South Africa Mains"],
+		[245, "Kaidan, South Africa Mains"],
+		[246, "Scenarios"],
+		[264, "Tutorial"],
+		[2441, "SA Agent Pack"],
+		[2449, "SA Agent Pack"],
+		[2451, "SA Agent Pack \n South Africa Mains"],
+		[2452, "SA Agent Pack \n South Africa Mains"],
+		[2453, "Achievement: Night Terrors"],
+		[2456, "Achievement: The Purge"],
+		[2457, "SA Agent Pack \n South Africa Mains"],
+		[2467, "SA Agent Pack \n South Africa Mains"],
+		[2468, "SA Agent Pack \n South Africa Mains"],
+		[2681, "DotM Collector's Edition"],
+		[2701, "Achievement: Greenhorn"],
+		[2722, "Dragon Faction Mission"],
+		[2721, "Templar Faction Mission"],
+		[2723, "Illuminati Faction mission"],
+		
+		//scenario
+		[2761, "Community events"],//jack
+		[2741, "Druids of Avalon Pack"],//Sif
+		[2747, "Druids of Avalon Pack"],//Lynch
+		[2742, "Druids of Avalon Pack \n Occult Defence scenario"],//Finn
+		[2743, "Druids of Avalon Pack \n Occult Defence scenario"],//Laughing
+		[2744, "Druids of Avalon Pack \n Occult Defence scenario"],//Francis
+		[2745, "Druids of Avalon Pack \n Occult Defence scenario"],//Amelia
+		[2746, "Druids of Avalon Pack \n Occult Defence scenario"],//Nuala
+		[2748, "Druids of Avalon Pack \n Occult Defence scenario"],//Brann
+		[2749, "Druids of Avalon Pack \n Occult Defence scenario"],//Fearghas
+		[2750, "Occult Defence scenario?"],//Lady
+		[2791, "Agent Mission Reward"]//Jerónimo
+	];
 	public static function main(swfRoot:MovieClip):Void {
 		var s_app = new Main(swfRoot);
 		swfRoot.onLoad = function() {s_app.Load()};
@@ -34,77 +103,6 @@ class com.fox.AgentViewer.Main {
 		HideBoone = DistributedValue.Create("AgentViewer_HideBoone");
 		HideOleg.SetValue(false);
 		HideBoone.SetValue(false);
-		AgentSources = new Object();
-		AgentSources["113"] = "Agent Pack \n Dungeons";
-		AgentSources["173"] = "Agent Pack \n Dungeons";
-		AgentSources["174"] = "Agent Pack \n Dungeons";
-		AgentSources["175"] = "Agent Pack \n Dungeons";
-		AgentSources["179"] = "Agent Pack \n Dungeons";
-		AgentSources["181"] = "Agent Pack \n Regionals";
-		AgentSources["204"] = "Agent Pack \n Regionals";
-		AgentSources["206"] = "Agent Pack \n Regionals";
-		AgentSources["207"] = "Agent Pack \n Regionals";
-		AgentSources["209"] = "Achievement: Global Network";
-		AgentSources["211"] = "Achievement: Mission Coordinator";
-		AgentSources["212"] = "Agent Mission Reward";
-		AgentSources["213"] = "Agent Mission Reward";
-		AgentSources["214"] = "Scenarios";
-		AgentSources["215"] = "Agent Pack \n Solomon, Kaidan Mains";
-		AgentSources["217"] = "Agent Pack \n Solomon, Egypt Mains";
-		AgentSources["218"] = "New York Raid";
-		AgentSources["221"] = "Agent Mission Reward";
-		AgentSources["223"] = "Agent Mission Reward";
-		AgentSources["224"] = "Scenario";
-		AgentSources["225"] = "Agent Mission Reward";
-		AgentSources["226"] = "Agent Pack \n Egypt, Transylvania Mains";
-		AgentSources["227"] = "Agent Pack \n Kaidan, South Africa Mains";
-		AgentSources["228"] = "Agent Pack \n Solomon, Egypt Mains";
-		AgentSources["229"] = "Scenarios";
-		AgentSources["230"] = "Regionals";
-		AgentSources["231"] = "Egypt, Transylvania Mains";
-		AgentSources["233"] = "Agent Pack \n Egypt, Transylvania Mains";
-		AgentSources["234"] = "Agent Pack \n Solomon, Egypt Mains";
-		AgentSources["235"] = "Scenarios";
-		AgentSources["236"] = "Solomon, Egypt Mains";
-		AgentSources["238"] = "Agent Mission Reward";
-		AgentSources["239"] = "Agent Pack \n Egypt, Transylvania Mains";
-		AgentSources["240"] = "Agent Pack \n Kaidan, South Africa Mains";
-		AgentSources["241"] = "Solomon, Egypt Mains";
-		AgentSources["242"] = "Agent Pack \n Egypt, Transylvania Mains";
-		AgentSources["244"] = "Kaidan, South Africa Mains";
-		AgentSources["245"] = "Kaidan, South Africa Mains";
-		AgentSources["246"] = "Scenarios";
-		AgentSources["264"] = "Tutorial";
-		AgentSources["2441"] = "SA Agent Pack";
-		AgentSources["2449"] = "SA Agent Pack";
-		AgentSources["2451"] = "SA Agent Pack \n South Africa Mains";
-		AgentSources["2452"] = "SA Agent Pack \n South Africa Mains";
-		AgentSources["2453"] = "Achievement: Night Terrors";
-		AgentSources["2456"] = "Achievement: The Purge";
-		AgentSources["2457"] = "SA Agent Pack \n South Africa Mains";
-		AgentSources["2467"] = "SA Agent Pack \n South Africa Mains";
-		AgentSources["2468"] = "SA Agent Pack \n South Africa Mains";
-		AgentSources["2681"] = "DotM Collector's Edition";
-		AgentSources["2701"] = "Achievement: Greenhorn";
-		
-		AgentSources["2722"] = "Dragon Faction Mission";
-		AgentSources["2721"] = "Templar Faction Mission";
-		AgentSources["2723"] = "Illuminati Faction mission";
-		
-		//new scenario patch
-		AgentSources["2761"] = "Community events";//jack
-		AgentSources["2741"] = "Druids of Avalon Pack";//Sif
-		AgentSources["2747"] = "Druids of Avalon Pack";//Lynch
-		AgentSources["2742"] = "Druids of Avalon Pack \n Occult Defence scenario";//Finn
-		AgentSources["2743"] = "Druids of Avalon Pack \n Occult Defence scenario";//Laughing
-		AgentSources["2744"] = "Druids of Avalon Pack \n Occult Defence scenario";//Francis
-		AgentSources["2745"] = "Druids of Avalon Pack \n Occult Defence scenario";//Amelia
-		AgentSources["2746"] = "Druids of Avalon Pack \n Occult Defence scenario";//Nuala
-		AgentSources["2748"] = "Druids of Avalon Pack \n Occult Defence scenario";//Brann
-		AgentSources["2749"] = "Druids of Avalon Pack \n Occult Defence scenario";//Fearghas
-		AgentSources["2750"] = "Occult Defence scenario?";//Lady
-		AgentSources["2791"] = "Agent Mission Reward";//Jerónimo
-		
 		if (_global.com.fox.AgentViewer.Hooked == undefined) _global.com.fox.AgentViewer.Hooked = false;
 	}
 	public function Load() {
@@ -220,18 +218,56 @@ class com.fox.AgentViewer.Main {
 				// AgentInfo.SetData
 					f = function(agentData:AgentSystemAgent) {
 						arguments.callee.base.apply(this, arguments);
-						if (!AgentSystem.HasAgent(agentData.m_AgentId)) {
+						if (!this.m_EquipmentTrait.text) {
 							this.m_Stat1.m_Value.text = agentData.m_Stat1.toString();
 							this.m_Stat2.m_Value.text = agentData.m_Stat2.toString();
 							this.m_Stat3.m_Value.text = agentData.m_Stat3.toString();
 							this.m_EquipmentTraitCategory.text = "Source";
-							if (Main.AgentSources[agentData.m_AgentId.toString()]) this.m_EquipmentTrait.text = Main.AgentSources[agentData.m_AgentId.toString()];
-							else this.m_EquipmentTrait.text = "Unkown";
+							for (var i in Main.AgentSources){
+								if (Main.AgentSources[i][0] == agentData.m_AgentId) {
+									this.m_EquipmentTrait.text = Main.AgentSources[i][1];
+								}
+							}
+							if(!this.m_EquipmentTrait.text) this.m_EquipmentTrait.text = "Unkown";
 							this.m_EquipmentTrait.autoSize = "right";
 						}
+						var prev:MovieClip = this.attachMovie("Button_prevArrow", "m_Prev", this.getNextHighestDepth());
+						prev._y = this.m_Name._y + 3;
+						prev._x = this.m_Background._width / 2 - prev._width * 2;
+						
+						var next:MovieClip = this.attachMovie("Button_nextArrow", "m_Next", this.getNextHighestDepth());
+						next._y = prev._y;
+						next._x = this.m_Background._width / 2 + prev._width;
+						
+						prev.addEventListener("click", this, "prevAgent");
+						next.addEventListener("click", this, "nextAgent");
 					};
 					f.base = _global.GUI.AgentSystem.AgentInfo.prototype.SetData;
 					_global.GUI.AgentSystem.AgentInfo.prototype.SetData = f;
+					
+					_global.GUI.AgentSystem.AgentInfo.prototype.prevAgent = function ():Void {
+						var Agents:Array = _root.agentsystem.m_Window.m_Content.m_Roster.m_AllAgents;
+						var current:Number = this.m_AgentData.m_AgentId;
+						for (var i:Number = 0; i < Agents.length; i++){
+							if (Agents[i].m_AgentId == current){
+								if (Agents[i - 1]){
+									_root.agentsystem.m_Window.m_Content["SlotAgentSelected"](Agents[i - 1]);
+								}
+							}
+						}
+					}
+					_global.GUI.AgentSystem.AgentInfo.prototype.nextAgent = function ():Void {
+						var Agents = _root.agentsystem.m_Window.m_Content.m_Roster.m_AllAgents;
+						var current = this.m_AgentData.m_AgentId;
+						for (var i:Number = 0; i < Agents.length; i++){
+							if (Agents[i].m_AgentId == current){
+								if (Agents[i + 1]){
+									_root.agentsystem.m_Window.m_Content["SlotAgentSelected"](Agents[i + 1]);
+								}
+							}
+						}
+					}
+					
 				// set to true so we know everything is hooked
 					_global.com.fox.AgentViewer.Hooked = true;
 				}
