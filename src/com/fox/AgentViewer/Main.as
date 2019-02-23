@@ -253,7 +253,7 @@ class com.fox.AgentViewer.Main {
 						for (var i:Number = 0; i < Agents.length; i++){
 							if (Agents[i].m_AgentId == current){
 								if (Agents[i - 1]){
-									_root.agentsystem.m_Window.m_Content["SlotAgentSelected"](Agents[i - 1]);
+									_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(Agents[i - 1]);
 								}
 							}
 						}
@@ -264,7 +264,7 @@ class com.fox.AgentViewer.Main {
 						for (var i:Number = 0; i < Agents.length; i++){
 							if (Agents[i].m_AgentId == current){
 								if (Agents[i + 1]){
-									_root.agentsystem.m_Window.m_Content["SlotAgentSelected"](Agents[i + 1]);
+									_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(Agents[i + 1]);
 								}
 							}
 						}
