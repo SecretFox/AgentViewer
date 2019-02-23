@@ -218,17 +218,19 @@ class com.fox.AgentViewer.Main {
 				// AgentInfo.SetData
 					f = function(agentData:AgentSystemAgent) {
 						arguments.callee.base.apply(this, arguments);
-						if (!this.m_EquipmentTrait.text) {
+						if (!AgentSystem.HasAgent(agentData.m_AgentId)) {
 							this.m_Stat1.m_Value.text = agentData.m_Stat1.toString();
 							this.m_Stat2.m_Value.text = agentData.m_Stat2.toString();
 							this.m_Stat3.m_Value.text = agentData.m_Stat3.toString();
+						}
+						if (!this.m_EquipmentTrait.text) {
 							this.m_EquipmentTraitCategory.text = "Source";
 							for (var i in Main.AgentSources){
 								if (Main.AgentSources[i][0] == agentData.m_AgentId) {
 									this.m_EquipmentTrait.text = Main.AgentSources[i][1];
 								}
 							}
-							if(!this.m_EquipmentTrait.text) this.m_EquipmentTrait.text = "Unkown";
+							if (!this.m_EquipmentTrait.text) this.m_EquipmentTrait.text = "Unkown";
 							this.m_EquipmentTrait.autoSize = "right";
 						}
 						var prev:MovieClip = this.attachMovie("Button_prevArrow", "m_Prev", this.getNextHighestDepth());
