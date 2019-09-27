@@ -75,8 +75,20 @@ class com.fox.AgentViewer.Main {
 		[2746, "Druids of Avalon Pack \n Occult Defence scenario"],//Nuala
 		[2748, "Druids of Avalon Pack \n Occult Defence scenario"],//Brann
 		[2749, "Druids of Avalon Pack \n Occult Defence scenario"],//Fearghas
-		[2750, "Occult Defence scenario?"],//Lady
-		[2791, "Agent Mission Reward"]//Jerónimo
+		[2750, "Occult Defence scenario"],//Lady
+		[2791, "Agent Mission Reward"],//Jerónimo
+		
+		//freemasons
+		[3087, "Freemasons Agent Pack"],//Letizia
+		[3090, "Freemasons Agent Pack"],//Eve
+		[3092, "Freemasons Agent Pack"],//Pilkington
+		[3094, "Freemasons Agent Pack"],//Marceline
+		[3096, "Freemasons Agent Pack"],//Romulus
+		[3098, "Freemasons Agent Pack"],//Artemis
+		[3100, "Freemasons Agent Pack"],//Erasmus
+		[3102, "Freemasons Agent Pack"],//Anastazyn
+		[3104, "Freemasons Agent Pack"],//Thaddeus
+		[3106, "Freemasons Agent Pack"]//Simon
 	];
 	public static function main(swfRoot:MovieClip):Void {
 		var s_app = new Main(swfRoot);
@@ -230,7 +242,7 @@ class com.fox.AgentViewer.Main {
 									this.m_EquipmentTrait.text = Main.AgentSources[i][1];
 								}
 							}
-							if (!this.m_EquipmentTrait.text) this.m_EquipmentTrait.text = "Unkown";
+							if (!this.m_EquipmentTrait.text) this.m_EquipmentTrait.text = "Unknown";
 							this.m_EquipmentTrait.autoSize = "right";
 						}
 						var prev:MovieClip = this.attachMovie("Button_prevArrow", "m_Prev", this.getNextHighestDepth());
