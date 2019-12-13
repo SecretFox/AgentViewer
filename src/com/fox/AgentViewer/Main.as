@@ -88,7 +88,13 @@ class com.fox.AgentViewer.Main {
 		[3100, "Freemasons Agent Pack"],//Erasmus
 		[3102, "Freemasons Agent Pack"],//Anastazyn
 		[3104, "Freemasons Agent Pack"],//Thaddeus
-		[3106, "Freemasons Agent Pack"]//Simon
+		[3106, "Freemasons Agent Pack"],//Simon
+		
+		//Agent Writing contest
+		[3120, "Agent Writing Contest\nShadow Trafficker"],//Rana
+		[3118, "Agent Writing Contest\nShadow Trafficker"],//The Cleaner
+		[3121, "Agent Writing Contest\nShadow Trafficker"],//Walter
+		[3130, "Agent Writing Contest"]//TheDuo
 	];
 	public static function main(swfRoot:MovieClip):Void {
 		var s_app = new Main(swfRoot);
@@ -281,6 +287,38 @@ class com.fox.AgentViewer.Main {
 							}
 						}
 					}
+					
+					/* 
+					 * TODO,gets rid of the annoying font in agent window
+					f = function(){
+						arguments.callee.base.apply(this, arguments);
+						var setFont:Function = function(txtfield:TextField){
+							if (!txtfield.scaled){
+								var oldFont:TextFormat = txtfield.getTextFormat();
+								oldFont.font = "_StandardFont";
+								oldFont.size = oldFont.size-3;
+								txtfield.setTextFormat(oldFont);
+								txtfield.setNewTextFormat(oldFont);
+								txtfield._y = txtfield._y - 4;
+								txtfield.scaled = true;
+							}
+						}
+						setFont(this.m_Name);
+						setFont(this.m_ActiveBG.m_Progress.m_Label);
+						setFont(this.m_ActiveBG.m_Progress.m_Timer);
+						setFont(this.m_ActiveBG.m_Text);
+						setFont(this.m_AvailableBG.m_Text);
+						setFont(this.m_CompleteBG.m_Text);
+						setFont(this.m_EmptyBG.m_Text);
+						setFont(this.m_ExpediteButton.textField);
+						setFont(this.m_ExpediteButton.costField);
+					}
+					f.base = _global.GUI.AgentSystem.MissionSlot.prototype.UpdateDisplay;
+					_global.GUI.AgentSystem.MissionSlot.prototype.UpdateDisplay = f;
+					for (var i in _root.agentsystem.m_Window.m_Content.m_MissionList){
+						_root.agentsystem.m_Window.m_Content.m_MissionList[i]["UpdateDisplay"]();
+					}
+					*/
 					
 				// set to true so we know everything is hooked
 					_global.com.fox.AgentViewer.Hooked = true;
