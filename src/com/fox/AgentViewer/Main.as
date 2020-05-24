@@ -269,24 +269,9 @@ class com.fox.AgentViewer.Main {
 							next.addEventListener("click", this, "nextAgent");
 						}
 					};
+					
 					f.base = _global.GUI.AgentSystem.AgentInfo.prototype.SetData;
 					_global.GUI.AgentSystem.AgentInfo.prototype.SetData = f;
-	
-					f = function(srcInventory, srcSlot:Number) {
-						this.SlotInventoryItemRightClicked(srcInventory, srcSlot);
-						_root.agentsystem.m_Window.m_Content.m_AgentInfoSheet["UpdateEquipment"]();
-					};
-					_global.GUI.AgentSystem.AgentSystemContent.prototype.SlotInventoryItemRightClicked2 = f;
-					
-					var clickSignal:Signal = _root.agentsystem.m_Window.m_Content.m_InventoryPanel.SignalItemRightClicked;
-					for (var i in clickSignal["m_EventList"]){
-						var slot:Slot = clickSignal["m_EventList"][i];
-						if (slot.GetCallback() == _root.agentsystem.m_Window.m_Content.SlotInventoryItemRightClicked){
-							slot["m_Callback"] = _root.agentsystem.m_Window.m_Content.SlotInventoryItemRightClicked2;
-						}
-						
-					}
-					
 					
 					_global.GUI.AgentSystem.AgentInfo.prototype.prevAgent = function ():Void {
 						var Agents:Array = _root.agentsystem.m_Window.m_Content.m_Roster.m_AllAgents;
@@ -294,8 +279,12 @@ class com.fox.AgentViewer.Main {
 						for (var i:Number = 0; i < Agents.length; i++){
 							if (Agents[i].m_AgentId == current){
 								if (Agents[i - 1]){
-									_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(Agents[i - 1]);
+									_root.agentsystem.m_Window.m_Content.m_AgentInfoSheet["CloseInfo"](); // shouldnt need this and timeout,but gearslot bugs out without
+									setTimeout(Delegate.create(this,function(data){
+										_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(data);
+									}), 1,Agents[i - 1]);
 								}
+								break;
 							}
 						}
 					}
@@ -305,8 +294,12 @@ class com.fox.AgentViewer.Main {
 						for (var i:Number = 0; i < Agents.length; i++){
 							if (Agents[i].m_AgentId == current){
 								if (Agents[i + 1]){
-									_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(Agents[i + 1]);
+									_root.agentsystem.m_Window.m_Content.m_AgentInfoSheet["CloseInfo"]();  // shouldnt need this and timeout,but gearslot bugs out without
+									setTimeout(Delegate.create(this,function(data){
+										_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(data);
+									}), 1,Agents[i + 1]);
 								}
+								break;
 							}
 						}
 					}
