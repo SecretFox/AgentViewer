@@ -2,6 +2,8 @@ import com.GameInterface.AgentSystem;
 import com.GameInterface.AgentSystemAgent;
 import com.GameInterface.DistributedValue;
 import com.Utils.Archive;
+import com.Utils.Signal;
+import com.Utils.Slot;
 import mx.utils.Delegate;
 class com.fox.AgentViewer.Main {
 
@@ -94,7 +96,10 @@ class com.fox.AgentViewer.Main {
 		[3120, "Agent Writing Contest\nShadow Trafficker"],//Rana
 		[3118, "Agent Writing Contest\nShadow Trafficker"],//The Cleaner
 		[3121, "Agent Writing Contest\nShadow Trafficker"],//Walter
-		[3130, "Agent Writing Contest"]//TheDuo
+		[3130, "Agent Writing Contest"],//TheDuo
+		
+		//Events
+		[3138, "Event:\nEnvoys of Avalon"]//Diviciacus
 	];
 	public static function main(swfRoot:MovieClip):Void {
 		var s_app = new Main(swfRoot);
@@ -251,19 +256,37 @@ class com.fox.AgentViewer.Main {
 							if (!this.m_EquipmentTrait.text) this.m_EquipmentTrait.text = "Unknown";
 							this.m_EquipmentTrait.autoSize = "right";
 						}
-						var prev:MovieClip = this.attachMovie("Button_prevArrow", "m_Prev", this.getNextHighestDepth());
-						prev._y = this.m_Name._y + 3;
-						prev._x = this.m_Background._width / 2 - prev._width * 2;
-						
-						var next:MovieClip = this.attachMovie("Button_nextArrow", "m_Next", this.getNextHighestDepth());
-						next._y = prev._y;
-						next._x = this.m_Background._width / 2 + prev._width;
-						
-						prev.addEventListener("click", this, "prevAgent");
-						next.addEventListener("click", this, "nextAgent");
+						if (!this.m_Prev){
+							var prev:MovieClip = this.attachMovie("Button_prevArrow", "m_Prev", this.getNextHighestDepth());
+							prev._y = this.m_Name._y + 3;
+							prev._x = this.m_Background._width / 2 - prev._width * 2;
+							
+							var next:MovieClip = this.attachMovie("Button_nextArrow", "m_Next", this.getNextHighestDepth());
+							next._y = prev._y;
+							next._x = this.m_Background._width / 2 + prev._width;
+							
+							prev.addEventListener("click", this, "prevAgent");
+							next.addEventListener("click", this, "nextAgent");
+						}
 					};
 					f.base = _global.GUI.AgentSystem.AgentInfo.prototype.SetData;
 					_global.GUI.AgentSystem.AgentInfo.prototype.SetData = f;
+	
+					f = function(srcInventory, srcSlot:Number) {
+						this.SlotInventoryItemRightClicked(srcInventory, srcSlot);
+						_root.agentsystem.m_Window.m_Content.m_AgentInfoSheet["UpdateEquipment"]();
+					};
+					_global.GUI.AgentSystem.AgentSystemContent.prototype.SlotInventoryItemRightClicked2 = f;
+					
+					var clickSignal:Signal = _root.agentsystem.m_Window.m_Content.m_InventoryPanel.SignalItemRightClicked;
+					for (var i in clickSignal["m_EventList"]){
+						var slot:Slot = clickSignal["m_EventList"][i];
+						if (slot.GetCallback() == _root.agentsystem.m_Window.m_Content.SlotInventoryItemRightClicked){
+							slot["m_Callback"] = _root.agentsystem.m_Window.m_Content.SlotInventoryItemRightClicked2;
+						}
+						
+					}
+					
 					
 					_global.GUI.AgentSystem.AgentInfo.prototype.prevAgent = function ():Void {
 						var Agents:Array = _root.agentsystem.m_Window.m_Content.m_Roster.m_AllAgents;
