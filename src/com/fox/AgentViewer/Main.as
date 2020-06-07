@@ -335,6 +335,14 @@ class com.fox.AgentViewer.Main {
 						_root.agentsystem.m_Window.m_Content.m_MissionList[i]["UpdateDisplay"]();
 					}
 					*/
+					f = function(){
+						arguments.callee.base.apply(this, arguments);
+						this.m_AgentDetailBlocker.onPress = Delegate.create(this,function(){
+							_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(this.m_AgentData);
+						});
+					}
+					f.base = _global.GUI.AgentSystem.MissionDetail.prototype.SetData;
+					_global.GUI.AgentSystem.MissionDetail.prototype.SetData = f;
 					
 				// set to true so we know everything is hooked
 					_global.com.fox.AgentViewer.Hooked = true;
