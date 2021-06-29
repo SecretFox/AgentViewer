@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?> 
 <Root>
 	<Value name="AgentViewer" value="true" />
-	<Archive name="AgentViewer_Cfg" />
 </Root>

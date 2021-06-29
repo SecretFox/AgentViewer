@@ -2,11 +2,10 @@
 <Root>
   <Module  name = "AgentViewer"
     movie       = "AgentViewer\AgentViewer.swf"
-    flags       = "GMF_CFG_STORE_USER_CONFIG"
+    flags       = ""
     depth_layer = "Top"
     sub_depth   = "2"
     variable    = "AgentViewer"
-	config_name = "AgentViewer_Cfg"
-    criteria    = "AgentViewer &amp;&amp; (guimode &amp; (GUIMODEFLAGS_INPLAY | GUIMODEFLAGS_ENABLEALLGUI))"
+    criteria    = "AgentViewer &amp;&amp; agentSystem_window &amp;&amp; (guimode &amp; (GUIMODEFLAGS_INPLAY | GUIMODEFLAGS_ENABLEALLGUI))"
   />
 </Root>
