@@ -1,5 +1,6 @@
 import com.GameInterface.AgentSystem;
 import com.GameInterface.AgentSystemAgent;
+import com.GameInterface.AgentSystemMission;
 import mx.utils.Delegate;
 
 class com.fox.AgentViewer.Main {
@@ -246,47 +247,61 @@ class com.fox.AgentViewer.Main {
 						}
 					}
 				}
-				
-				/* 
-				 * TODO,gets rid of the annoying font in agent window
-				f = function(){
-					arguments.callee.base.apply(this, arguments);
-					var setFont:Function = function(txtfield:TextField){
-						if (!txtfield.scaled){
-							var oldFont:TextFormat = txtfield.getTextFormat();
-							oldFont.font = "_StandardFont";
-							oldFont.size = oldFont.size-3;
-							txtfield.setTextFormat(oldFont);
-							txtfield.setNewTextFormat(oldFont);
-							txtfield._y = txtfield._y - 4;
-							txtfield.scaled = true;
-						}
-					}
-					setFont(this.m_Name);
-					setFont(this.m_ActiveBG.m_Progress.m_Label);
-					setFont(this.m_ActiveBG.m_Progress.m_Timer);
-					setFont(this.m_ActiveBG.m_Text);
-					setFont(this.m_AvailableBG.m_Text);
-					setFont(this.m_CompleteBG.m_Text);
-					setFont(this.m_EmptyBG.m_Text);
-					setFont(this.m_ExpediteButton.textField);
-					setFont(this.m_ExpediteButton.costField);
-				}
-				f.base = _global.GUI.AgentSystem.MissionSlot.prototype.UpdateDisplay;
-				_global.GUI.AgentSystem.MissionSlot.prototype.UpdateDisplay = f;
-				for (var i in _root.agentsystem.m_Window.m_Content.m_MissionList){
-					_root.agentsystem.m_Window.m_Content.m_MissionList[i]["UpdateDisplay"]();
-				}
-				*/
 				f = function(){
 					arguments.callee.base.apply(this, arguments);
 					this.m_AgentDetailBlocker.onPress = Delegate.create(this,function(){
 						_root.agentsystem.m_Window.m_Content.m_Roster.SignalAgentSelected.Emit(this.m_AgentData);
 					});
+					if (!this.m_Prev){
+						var prev:MovieClip = this.attachMovie("Button_prevArrow", "m_Prev", this.getNextHighestDepth());
+						prev._y = this.m_Name._y +3;
+						prev._x = this.m_Name._width / 1.5 - prev._width * 2;
+						
+						var next:MovieClip = this.attachMovie("Button_nextArrow", "m_Next", this.getNextHighestDepth());
+						next._y = prev._y;
+						next._x = this.m_Name._width / 1.5 + prev._width;
+						
+						prev.addEventListener("click", this, "prevMission");
+						next.addEventListener("click", this, "nextMission");
+					}
+					var missionData:AgentSystemMission = this.m_MissionData;
+					if ( missionData.m_StarRating == 6 ){
+						this.m_Prev._visible = false;
+						this.m_Next._visible = false;
+					}
+					else
+					{
+						this.m_Prev._visible = true;
+						this.m_Next._visible = true;
+					}
 				}
 				f.base = _global.GUI.AgentSystem.MissionDetail.prototype.SetData;
 				_global.GUI.AgentSystem.MissionDetail.prototype.SetData = f;
 				
+				_global.GUI.AgentSystem.MissionDetail.prototype.prevMission = function ():Void {
+					var missionList = _root.agentsystem.m_Window.m_Content.m_AvailableMissionList;
+					for (var i = 0; i < 5; i++){
+						var slot = missionList["m_Slot_" + i];
+						if (slot.m_MissionData.m_MissionId == this.m_MissionData.m_MissionId){
+							if ( i == 0) i = 4;
+							else i--;
+							missionList.SignalMissionSelected.Emit(missionList["m_Slot_" + i].m_MissionData);
+							break;
+						}
+					}
+				}
+				_global.GUI.AgentSystem.MissionDetail.prototype.nextMission = function ():Void {
+					var missionList = _root.agentsystem.m_Window.m_Content.m_AvailableMissionList;
+					for (var i = 0; i < 5; i++){
+						var slot = missionList["m_Slot_" + i];
+						if (slot.m_MissionData.m_MissionId == this.m_MissionData.m_MissionId){
+							if ( i == 4) i = 0;
+							else i++;
+							missionList.SignalMissionSelected.Emit(missionList["m_Slot_" + i].m_MissionData);
+							break;
+						}
+					}
+				}
 			// set to true so we know everything is hooked
 				_global.com.fox.AgentViewer.Hooked = true;
 			}
