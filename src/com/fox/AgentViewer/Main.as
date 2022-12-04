@@ -280,30 +280,52 @@ class com.fox.AgentViewer.Main {
 				
 				_global.GUI.AgentSystem.MissionDetail.prototype.prevMission = function ():Void {
 					var missionList = _root.agentsystem.m_Window.m_Content.m_AvailableMissionList;
-					for (var i = 0; i < 5; i++){
+					for (var i = 0; i < 5; i++) {
 						var slot = missionList["m_Slot_" + i];
-						if (slot.m_MissionData.m_MissionId == this.m_MissionData.m_MissionId){
-							if ( i == 0) i = 4;
-							else i--;
-							missionList.SignalMissionSelected.Emit(missionList["m_Slot_" + i].m_MissionData);
+						if (slot.m_MissionData.m_MissionId == this.m_MissionData.m_MissionId) {
+							var index = i;
+							for ( var y = 0; y < 5; y++) {
+								index--;
+								if (index < 0) index = 4;
+								slot = missionList["m_Slot_" + index];
+								if (!AgentSystem.IsMissionActive(slot.m_MissionData.m_MissionId) &&
+									!AgentSystem.IsMissionComplete(slot.m_MissionData.m_MissionId) &&
+									slot.m_MissionData.m_MissionId != 0 &&
+									slot.m_MissionData.m_MissionId != this.m_MissionData.m_MissionId)
+								{
+									missionList.SignalMissionSelected.Emit(slot.m_MissionData);
+									break;
+								}
+							}
 							break;
 						}
 					}
 				}
 				_global.GUI.AgentSystem.MissionDetail.prototype.nextMission = function ():Void {
 					var missionList = _root.agentsystem.m_Window.m_Content.m_AvailableMissionList;
-					for (var i = 0; i < 5; i++){
+					for (var i = 0; i < 5; i++) {
 						var slot = missionList["m_Slot_" + i];
-						if (slot.m_MissionData.m_MissionId == this.m_MissionData.m_MissionId){
-							if ( i == 4) i = 0;
-							else i++;
-							missionList.SignalMissionSelected.Emit(missionList["m_Slot_" + i].m_MissionData);
+						if (slot.m_MissionData.m_MissionId == this.m_MissionData.m_MissionId) {
+							var index = i;
+							for ( var y = 0; y < 5; y++) {
+								index++;
+								if (index == 5) index = 0;
+								slot = missionList["m_Slot_" + index];
+								if (!AgentSystem.IsMissionActive(slot.m_MissionData.m_MissionId) &&
+									!AgentSystem.IsMissionComplete(slot.m_MissionData.m_MissionId) &&
+									slot.m_MissionData.m_MissionId != 0 &&
+									slot.m_MissionData.m_MissionId != undefined &&
+									slot.m_MissionData.m_MissionId != this.m_MissionData.m_MissionId)
+								{
+									missionList.SignalMissionSelected.Emit(slot.m_MissionData);
+									break;
+								}
+							}
 							break;
 						}
 					}
 				}
-			// set to true so we know everything is hooked
-				_global.com.fox.AgentViewer.Hooked = true;
+			_global.com.fox.AgentViewer.Hooked = true;
 			}
 		}
 		else {
